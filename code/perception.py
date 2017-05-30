@@ -131,9 +131,9 @@ def perception_step(Rover):
     Rover.vision_image[:,:,2] = nav_warped
 
     # 5) Convert map image pixel values to rover-centric coords
-    nav_dist, nav_angles = rover_coords(nav_xpix, nav_ypix)
-    obs_dist, obs_angles = rover_coords(obs_xpix, obs_ypix)
-    rock_dist, rock_angles = rover_coords(rock_xpix, rock_ypix)
+    nav_xpix, nav_ypix = rover_coords(nav_warped)
+    obs_xpix, obs_ypix = rover_coords(obs_warped)
+    rock_xpix, rock_ypix = rover_coords(rock_warped)
     # 6) Convert rover-centric pixel values to world coordinates
     scale = 10
     nav_xpix_world, nav_ypix_world = pix_to_world(nav_xpix, nav_ypix, 
@@ -160,11 +160,9 @@ def perception_step(Rover):
     Rover.worldmap[nav_ypix_world, nav_xpix_world, 2] += 255
 
     # 8) Convert rover-centric pixel positions to polar coordinates
+    Rover.nav_dists, Rover.nav_angles = to_polar_coords(nav_xpix, nav_ypix) 
     # Update Rover pixel distances and angles
         # Rover.nav_dists = rover_centric_pixel_distances
         # Rover.nav_angles = rover_centric_angles
-    
- 
-    
     
     return Rover
