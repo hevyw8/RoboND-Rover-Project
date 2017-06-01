@@ -4,7 +4,6 @@ import numpy as np
 # This is where you can build a decision tree for determining throttle, brake and steer 
 # commands based on the output of the perception_step() function
 def decision_step(Rover):
-
     # Implement conditionals to decide what to do given perception data
     # Here you're all set up with some basic functionality but you'll need to
     # improve on this decision tree to do a good job of navigating autonomously!
@@ -58,8 +57,11 @@ def decision_step(Rover):
                     # Release the brake
                     Rover.brake = 0
                     # Set steer to mean angle
-                    Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+                    Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -20, 20)
                     Rover.mode = 'forward'
+        # If rover velocity is 0 or less steer to mean angle
+        elif Rover.vel <= 0:
+            Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -20, 20)
     # Just to make the rover do something 
     # even if no modifications have been made to the code
     else:
@@ -67,9 +69,27 @@ def decision_step(Rover):
         Rover.steer = 0
         Rover.brake = 0
         
-    # If in a state where want to pickup a rock send pickup command
-    if Rover.near_sample and Rover.vel == 0 and not Rover.picking_up:
+    # If in a state where want to pickup a rock send pickup command add 
+    if Rover.near_sample and not Rover.picking_up:
+        Rover.samples_found += 1
+        Rover.throttle_set == 0
         Rover.send_pickup = True
+
+    # # Set sample count to 6 if no samples have been found.
+    # if Rover.samples_pos is None:
+    #     Rover.samples_to_find = 6
+    #     Rover.samples_found = 0
+
+    # # Check for circling and disrupt steering pattern
+    # if Rover.steer != 15.0:
+    #     steering_counter = 0
+
+    # while Rover.steer > 15.0 or Rover.steer < -15.0:
+    #     steering_counter += 1
+
+    # if steering_counter >= 2500:
+    #     Rover.steer = 30
+    # print("Steering counter", steering_counter)
     
     return Rover
 
