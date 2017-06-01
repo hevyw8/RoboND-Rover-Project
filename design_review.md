@@ -22,9 +22,6 @@
 
 [//]: # (Image References)
 
-[image1]: ./misc/rover_image.jpg
-[image2]: ./output/test_mapping.mp4
-[image3]: ./output/roversim1stsubmission.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/916/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -39,12 +36,11 @@ This is my first Design Review, for the Search and Mapping challenge
 ### Notebook Analysis
 #### 1. Run the functions provided in the notebook on test images (first with the test data provided, next on data you have recorded). Add/modify functions to allow for color selection of obstacles and rock samples.
 
-I implemented additional threshold functions to map obstacles, navigable terrain and rock samples. For rock samples I implemented a high and low threshold for RGB values and stacked equality checks into a single index. Largely duplicating the method used to identify navigable and unnavigable terrain (obstacles). I retrieved the RGB thresholds for the rock sample from the plotted sample images.
+I implemented additional threshold functions to map obstacles, navigable terrain and rock samples. For obstacles I sumply implemented the negative of the navigable terrain. For rock samples I retrieved the RGB thresholds for the rock sample from the plotted sample images. Then implemented a high and low threshold for RGB values and stacked equality checks into a single index. Largely duplicating the method used to identify navigable and unnavigable terrain (obstacles). 
 
-#### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
-And another! 
+#### 2. Populate the process_image() function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap. Run process_image() on your test data using the moviepy functions provided to create video output of your result.
 
-![Test Mapping][image2]
+Using a series of Coordinate transforms and warping, objects observed by the rover camera were applied to the world map.
 
 ### Autonomous Navigation and Mapping
 
@@ -56,9 +52,9 @@ This was a reapplication of the color thresholding, warping and mapping used in 
 
 **Note: running the simulator with different choices of resolution and graphics quality may produce different results, particularly on different machines!  Make a note of your simulator settings (resolution and graphics quality set on launch) and frames per second (FPS output to terminal by `drive_rover.py`) in your writeup when you submit the project so your reviewer can reproduce your results.**
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+My approach was largely implementing the same perception and ensuring the decision function performed well enought to meat the minimum requirements of identifying samples on the map and mapping 40% of the ground truth map with at least 60% fidelity. Only a small tweak was made to the decision tree in order to ensure the rover steers if velocity is 0 despite throttle being applied.
 
-
+I would like to in future versions implement decisions based on rock sample detection. And use a breadcrumb approach to ensure the rover does not cover the same ground more than necessary.
 
 ![Rover Autonomous Run][image3]
 
